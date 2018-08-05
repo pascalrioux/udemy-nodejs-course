@@ -3,6 +3,7 @@ const hbs = require('hbs');
 const fs = require('fs');
 
 const port = process.env.PORT || 3000;
+const maintenanceMode = false;
 
 var app = express();
 hbs.registerPartials(__dirname + '/views/partials');
@@ -21,9 +22,11 @@ app.use((request, response, next) => {
   next();
 });
 
-app.use((request, response, next) => {
-  response.render('maintenance.hbs');
-});
+if (maintenanceMode === true) {
+  app.use((request, response, next) => {
+    response.render('maintenance.hbs');
+  });
+}
 
 hbs.registerHelper('getCurrentYear', () => {
   return new Date().getFullYear();
